@@ -1,5 +1,9 @@
 package rest;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import dto.Item;
+import dto.Success;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -19,18 +23,21 @@ public class Client {
                 .when();
 
     public static void main(String[] args) {
-        Response getItemsResponse = baseRequest.get("items")
+        Item item = Item.builder().name("Poison")
+                .quantity_unit("kg")
+                .price_for_quantity(10).build();
+        Gson gson = new GsonBuilder().create();
+        Response response = baseRequest.body(gson.toJson(item))
+                .post("/item")
                 .prettyPeek();
-
-        Response getClientsResponse = baseRequest.get("clients")
-                .prettyPeek();
-
-        Response getAllInvoices = baseRequest.get("invoices")
-                .prettyPeek();
-
-
-    }
-
+        String clientResponse = response.getBody().asString();
+        Success success = gson.fromJson(clientResponse, Success.class);
+        baseRequest.get("/item" + "/" + success.getId());
+   /*     baseRequest.get("items").prettyPeek();
+        baseRequest.get("clients").prettyPeek();
+        baseRequest.get("invoices").prettyPeek();
+        baseRequest.get("settings/bankaccounts").prettyPeek();*/
+         }
     }
 
 
