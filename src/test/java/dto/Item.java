@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-
 @AllArgsConstructor
 @Builder
 @Data
@@ -33,5 +32,4 @@ public class Item {
         System.out.println(item2.getName());
     }
 }
-
 
