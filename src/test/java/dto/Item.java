@@ -15,6 +15,8 @@ public class Item {
     private String quantity_unit;
     private int price_for_quantity;
     private String currency;
+    private double price;
+
 
 
     public static void main(String[] args) {
@@ -32,4 +34,3 @@ public class Item {
         System.out.println(item2.getName());
     }
 }
-

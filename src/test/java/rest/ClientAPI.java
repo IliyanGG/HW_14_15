@@ -1,49 +1,34 @@
 package rest;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import dto.Client;
-import dto.SuccessResponse;
 import io.restassured.response.Response;
 
-public class ClientAPI {
-
-  private static Gson gson = new GsonBuilder().create();
-  private static final String CLIENTS_URL = "/clients";
-  private static final String CLIENT_URL = "/client";
-
-  public static Response getAllClients() {
-    return HTTPClient.get(CLIENTS_URL);
-  }
-
-  public static Response getClient(int id) {
-    return HTTPClient.get(CLIENT_URL + "/" + id);
-  }
-
-  public static Response createClient(Client client) {
-    return HTTPClient.post(CLIENT_URL, gson.toJson(client));
-  }
-
-  public static Response updateClient(int id, Client client) {
-    return HTTPClient.put(CLIENT_URL + "/" + id, gson.toJson(client));
-  }
+public class ClientAPI extends HTTPClient {
+    private static final String CLIENT_URL = "/clients";
 
 
-  public static Response deleteClient(int id) {
-    return HTTPClient.delete(CLIENT_URL + "/" + id);
-  }
+    public ClientAPI(String baseUri, String basePath, String token) {
+        super(baseUri, basePath, token);
+    }
 
+    public Response createClient(Client client){
+        return post(CLIENT_URL, GSON.toJson(client));
+    }
 
-  public static void main(String[] args) {
-    Response getAllResp = getAllClients();
-    Client clientDto = new Client("Firmata2", "Sofia2", "New address2", true, "new firm mol4", "bulstat4", "vat number4");
-    Response createClientResp = createClient(clientDto);
-    String clientCreateString = createClientResp.getBody().asString();
-    SuccessResponse successResponse = gson.fromJson(clientCreateString, SuccessResponse.class);
-    int clientId = successResponse.getSuccess().getId();
-    Response getClientResp = getClient(clientId);
-   clientDto.setFirm_name("Updated Firm name2");
-    clientDto.setFirm_town("Plovdivv");
-  Response updateClientResp = updateClient(clientId, clientDto);
-  }
+    public Response updateClient(String id, Client client){
+        return put(CLIENT_URL + "/" + id, GSON.toJson(client));
+    }
+
+    public Response deleteClient(String id){
+        return delete(CLIENT_URL + "/" + id);
+    }
+
+    public Response getClient(String id){
+        return get(CLIENT_URL + "/" + id);
+    }
+
+    public Response getAllClients(){
+        return get(CLIENT_URL);
+    }
 }
+
